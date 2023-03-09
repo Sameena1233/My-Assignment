@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Bar Chart Demo</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+	<div>
+		<label for="input-value">Input Value:</label>
+		<input type="number" id="input-value">
+	</div>
+	<div>
+		<label for="max-value">Max Value:</label>
+		<input type="number" id="max-value">
+	</div>
+	<button id="plot-btn">Plot</button>
+	<canvas id="myChart"></canvas>
+
+	<script>
+		$(document).ready(function() {
+			$('#plot-btn').click(function() {
+				var inputValue = parseInt($('#input-value').val());
+				var maxValue = parseInt($('#max-value').val());
+
+				if (inputValue > maxValue) {
+					alert('Input Value should be less than or equal to Max Value');
+					return false;
+				}
+
+				var ctx = document.getElementById('myChart').getContext('2d');
+				var chart = new Chart(ctx, {
+					type: 'bar',
+					data: {
+						labels: ['Input Value', 'Max Value'],
+						datasets: [{
+							label: 'Percentage',
+							data: [inputValue, maxValue],
+							backgroundColor: [
+								'rgba(255, 99, 132, 0.2)',
+								'rgba(54, 162, 235, 0.2)',
+							],
+							borderColor: [
+								'rgba(255, 99, 132, 1)',
+								'rgba(54, 162, 235, 1)',
+							],
+							borderWidth: 1
+						}]
+					},
+					options: {
+						title: {
+							display: true,
+							text: 'Bar Chart'
+						},
+						scales: {
+							yAxes: [{
+								ticks: {
+									beginAtZero: true,
+									max: maxValue
+								},
+								scaleLabel: {
+									display: true,
+									labelString: 'Value'
+								}
+							}],
+							xAxes: [{
+								scaleLabel: {
+									display: true,
+									labelString: 'Category'
+								}
+							}]
+						},
+						tooltips: {
+							callbacks: {
+								label: function(tooltipItem, data) {
+									var dataset = data.datasets[tooltipItem.datasetIndex];
+									var currentValue = dataset.data[tooltipItem.index];
+									var totalValue = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
+										return previousValue + currentValue;
+									});
+									var percentage = Math.round((currentValue / totalValue) * 100);
+									return currentValue + ' (' + percentage + '%)';
+								}
+							}
+						}
+					}
+				});
+			});
+		});
+	</script>
+</body>
+</html>

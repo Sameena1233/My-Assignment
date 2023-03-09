@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pie Chart Demo</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+	<div>
+		<label for="input-value">Input Value:</label>
+		<input type="number" id="input-value">
+	</div>
+	<div>
+		<label for="max-value">Max Value:</label>
+		<input type="number" id="max-value">
+	</div>
+	<button id="plot-btn">Plot</button>
+		<canvas id="myChart" width="400" height="50"></canvas>
+
+	<script>
+		$(document).ready(function() {
+			$('#plot-btn').click(function() {
+				var inputValue = parseInt($('#input-value').val());
+				var maxValue = parseInt($('#max-value').val());
+
+				if (inputValue > maxValue) {
+					alert('Input Value should be less than or equal to Max Value');
+					return false;
+				}
+
+				var ctx = document.getElementById('myChart').getContext('2d');
+				var chart = new Chart(ctx, {
+					type: 'pie',
+					data: {
+						labels: ['Input Value', 'Max Value'],
+						datasets: [{
+							data: [inputValue, maxValue - inputValue],
+							backgroundColor: [
+								'rgba(255, 99, 132, 0.2)',
+								'rgba(54, 162, 235, 0.2)',
+							],
+							borderColor: [
+								'rgba(255, 99, 132, 1)',
+								'rgba(54, 162, 235, 1)',
+							],
+							borderWidth: 1
+						}]
+					},
+					options: {
+						responsive: false,
+							maintainAspecRatio: false
+						title: {
+							display: true,
+							text: 'Pie Chart'
+						}
+					}
+				});
+			});
+		});
+	</script>
+</body>
+</html>
